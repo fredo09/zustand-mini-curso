@@ -8,7 +8,11 @@ interface BearState {
     blackbears: number;
     pandaBears: number;
     polarBears: number;
+
+    //* Actions
     increase: (by: number) => void;
+    increasePolar: (by: number) => void;
+    increasePanda: (by: number) => void;
 }
 
 export const useBearStore = create<BearState>()((set) => ({
@@ -19,4 +23,7 @@ export const useBearStore = create<BearState>()((set) => ({
 
     //* Acciones del tendra el estado para modificar su store
     increase: (by: number) => set((state) => ({ blackbears: state.blackbears + by })),
+    increasePolar: (by: number) => set(state => ({ polarBears: state.polarBears + by })),
+    increasePanda: (by: number) => set((state) => ({ pandaBears : state.pandaBears + by }))
+
 }));
