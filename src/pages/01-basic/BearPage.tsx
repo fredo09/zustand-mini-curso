@@ -1,3 +1,4 @@
+import { useShallow } from 'zustand/react/shallow';
 import { WhiteCard } from '../../components';
 import { useBearStore } from '../../store';
 
@@ -18,7 +19,9 @@ export const BearPage = () => {
 
         {/* PnadaBearsCount */}
         <PnadaBearsCount/>
-        
+
+        <DisplayBears/>
+
       </div>
     </>
   );
@@ -81,3 +84,28 @@ export const PnadaBearsCount = () => {
     </WhiteCard>
   );
 }
+
+/*
+ * Al usar useShallow del zustan este evalua si el estado ha cambiado esto para
+ * renderizar de nuevo el componente cuando cambia el store
+ */
+
+export const DisplayBears = () => {
+
+  const bears = useBearStore(useShallow(state => state.bears));
+  const doNothing = useBearStore( state => state.doNothing);
+
+  return (
+
+    <WhiteCard>
+        <h2>Osos</h2>
+        <button onClick={() => doNothing()}>doNothing</button>
+        <pre>
+          {
+            JSON.stringify(bears, null, 2)
+          }
+        </pre>
+    </WhiteCard>
+  )
+}
+
