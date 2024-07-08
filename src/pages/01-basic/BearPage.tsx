@@ -51,7 +51,7 @@ export const BlackBearsCount = () => {
 export const PolarBearsCount = () => {
   const polarBears = useBearStore( state => state.polarBears );
   const incrementPolarBears = useBearStore( state => state.increasePolar );
-
+  
   return (
     <WhiteCard centered>
       <h2>Osos Polares</h2>
@@ -60,7 +60,6 @@ export const PolarBearsCount = () => {
         <button onClick={ () => incrementPolarBears( + 1 ) } > +1</button>
         <span className="text-3xl mx-2 lg:mx-10"> { polarBears } </span>
         <button onClick={ () => incrementPolarBears( - 1 ) } >-1</button>
-
       </div>
 
     </WhiteCard>
@@ -95,11 +94,16 @@ export const DisplayBears = () => {
   const bears = useBearStore(useShallow(state => state.bears));
   const doNothing = useBearStore( state => state.doNothing);
 
+  const addBears = useBearStore(state => state.addBear);
+  const clearBears = useBearStore(state => state.clearBear);
+
   return (
 
     <WhiteCard>
         <h2>Osos</h2>
         <button onClick={() => doNothing()}>doNothing</button>
+        <button className='mt-2' onClick={() => clearBears()}>Eliminar Oso</button>
+        <button className='mt-2' onClick={() => addBears()}>Agregar Oso</button>
         <pre>
           {
             JSON.stringify(bears, null, 2)
