@@ -16,6 +16,10 @@ interface BearState {
 
     bears: Bear[];
 
+    computedBears : {
+        totalBears: number
+    };
+
     //* Actions
     increase: (by: number) => void;
     increasePolar: (by: number) => void;
@@ -26,12 +30,24 @@ interface BearState {
     clearBear: () => void;
 }
 
-export const useBearStore = create<BearState>()((set) => ({
+/*
+ * Aqui tenemos dos metodos "set" y "get" esto para poder manipular el state
+ * en Zustand
+ */
+
+export const useBearStore = create<BearState>()((set, get) => ({
     blackbears: 10, //* Properties del estado
     pandaBears: 5,
     polarBears: 2,
 
     bears: [ { id: 1, name: 'Bears # 1' } ],
+
+
+    computedBears: {
+      get totalBears() {
+        return get().blackbears + get().pandaBears + get().polarBears + get().bears.length
+      }
+    },
 
 
     //* Acciones del tendra el estado para modificar su store
