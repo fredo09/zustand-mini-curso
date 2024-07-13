@@ -23,6 +23,7 @@ interface ActonsState {
 export const usePersonStore = create<PersonState & ActonsState>()(
     persist(
         (set) => ({
+            //!Atributes
             firstName: '',
             lastName: '',
 
