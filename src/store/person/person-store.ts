@@ -1,7 +1,7 @@
 /**
  * Person state
  */
-import { create } from 'zustand';
+import { type StateCreator, create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 /**
@@ -20,17 +20,21 @@ interface ActonsState {
     setLastName: (value: string) => void;
 }
 
+//! Separando el store con 
+const storeApi: StateCreator<PersonState & ActonsState> = (set) => ({
+    //!Atributes
+    firstName: '',
+    lastName: '',
+
+    //! ACTIONS
+    setFirstName: (value: string) => set(state => ({ firstName: value })),
+    setLastName: (value: string) => set(state => ({ lastName: value })),
+})
+
 export const usePersonStore = create<PersonState & ActonsState>()(
     persist(
-        (set) => ({
-            //!Atributes
-            firstName: '',
-            lastName: '',
-
-            //! ACTIONS
-            setFirstName: (value: string) => set(state => ({ firstName: value })),
-            setLastName: (value: string) => set(state => ({ lastName: value })),
-        }),
+        storeApi //* -> Pongo mi declaracion de mi store aqui 
+        ,
         //! Parametro para la key donde se guardara en localStorage por defecto
         {
             name: 'person-store'
