@@ -34,6 +34,7 @@ export const PersonPage = () => {
                     name="firstName"
                     id="firstName"
                     placeholder="Primer Nombre"
+                    value={firstNameStore}
                     onChange={(e) => setFirstNameStore(e.target.value)}
                   />
                 </div>
@@ -50,6 +51,7 @@ export const PersonPage = () => {
                     name="lastName"
                     id="lastName"
                     placeholder="Apellido"
+                    value={lastNameStore}
                     onChange={(e) => setLastNameStore(e.target.value)}
                   />
                 </div>
