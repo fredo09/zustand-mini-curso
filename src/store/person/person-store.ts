@@ -3,7 +3,8 @@
  */
 import { type StateCreator, create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { customSessionStore } from '../sessionStore/customSessionStore.store';
+//import { customSessionStore } from '../sessionStore/customSessionStore.store';
+import { firebaseSessionStore } from '../sessionStore/firebaseStore.stote';
 
 /**
  * Person State
@@ -39,7 +40,8 @@ export const usePersonStore = create<PersonState & ActonsState>()(
         //! Parametro para la key donde se guardara en localStorage por defecto
         {
             name: 'person-store',
-            storage: customSessionStore, //* -> Forma de crear el sesion store en zustand 
+            //storage: customSessionStore, //* -> Forma de crear el sesion store en zustand
+            storage: firebaseSessionStore, //* -> usando con firebase
         }
     )
 );
