@@ -28,13 +28,14 @@ const apiSessionStore: StateStorage = {
 
     setItem: async function (name: string, value: string): Promise<void> {
         // console.log("🚀 ~ set Item:", { name, value });
-        const data = await fetch(`${firebaseUrl}/${name}.json`, {
+        await fetch(`${firebaseUrl}/${name}.json`, {
             method: 'PUT',
             body: value
         }).then(response => response.json());
         
-        console.log("🚀 ~ data:", data)
-        //sessionStorage.setItem(name, value);
+        // console.log("🚀 ~ data:", data);
+
+        //! -> guarda en el sesionStore: sessionStorage.setItem(name, value);
         return;
     },
 
