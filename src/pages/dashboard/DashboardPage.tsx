@@ -4,7 +4,7 @@ import { IoAccessibilityOutline, IoHeartOutline, IoListOutline, IoLockClosedOutl
 
 export const Dashboard = () => {
 
-  const totalBears = useBearStore(state => state.computedBears.totalBears);
+  const totalBears = useBearStore(state => state.totalBears);
 
   const namePerson = usePersonStore(state => state.firstName);
   const lastNamePerson = usePersonStore(state => state.lastName);
@@ -20,7 +20,7 @@ export const Dashboard = () => {
         <WhiteCard centered>
           <IoPawOutline size={ 50 } className="text-indigo-600" />
           <h2>Osos</h2>
-          <p>N. Osos {totalBears}</p>
+          <p>N. Osos {totalBears()}</p>
         </WhiteCard>
 
 
