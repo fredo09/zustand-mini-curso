@@ -4,6 +4,7 @@
 
 import { create, StateCreator } from 'zustand';
 import { TaskI, TaskStatus } from "../../interfaces";
+import { devtools } from 'zustand/middleware';
 
 interface TaskState {
     tasks: Record<string, TaskI>; //* -> { [key: string]: TaskI }
@@ -27,4 +28,8 @@ const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
     },
 });
 
-export const useTaskStore = create<TaskState>()(TaskStoreApi);
+export const useTaskStore = create<TaskState>()(
+    devtools(
+        TaskStoreApi
+    )
+);
