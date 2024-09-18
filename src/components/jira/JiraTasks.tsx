@@ -1,6 +1,9 @@
+import { DragEvent } from 'react';
+import classNames from 'classnames';
 import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from 'react-icons/io5';
 import { TaskI, TaskStatus } from '../../interfaces';
 import { SingleJira } from './SingleJira';
+import { useTaskStore } from '../../store/taks/task.store';
 
 interface Props {
   title: string;
@@ -10,11 +13,34 @@ interface Props {
 
 
 export const JiraTasks = ({ title, value, tasks }: Props) => {
-  console.log("🚀 ~ :", value);
+  const isDragging = useTaskStore( state => !!state.draggingTaskId );
+  console.log("🚀 ~ JiraTasks ~ isDragging:", isDragging);
+  
+  const handleOnDragOver = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    console.log("onDragOver", value);
+  }
+
+  const handleOnDragLeave = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    console.log("onDragLeave", value)
+  }
+
+  const handleOnDrop = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    console.log("onDrop", value)
+  }
+
   return (
-    <div className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]">
-
-
+    <div 
+      className={
+        classNames("!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]", {
+          "border-blue-500 border-dotted" : isDragging
+        })
+      }
+      onDragOver={handleOnDragOver}
+      onDragLeave={handleOnDragLeave}
+      onDrop={handleOnDrop}>
       {/* Task Header */ }
       <div className="relative flex flex-row justify-between">
 
