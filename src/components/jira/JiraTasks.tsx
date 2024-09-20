@@ -1,4 +1,4 @@
-import { DragEvent } from 'react';
+import { DragEvent, useState } from 'react';
 import classNames from 'classnames';
 import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from 'react-icons/io5';
 import { TaskI, TaskStatus } from '../../interfaces';
@@ -11,36 +11,43 @@ interface Props {
   value: TaskStatus;
 }
 
-
 export const JiraTasks = ({ title, value, tasks }: Props) => {
+  const [onDragOver, setonDragOver] = useState(false);
+
   const isDragging = useTaskStore( state => !!state.draggingTaskId );
-  console.log("🚀 ~ JiraTasks ~ isDragging:", isDragging);
+  const onTaskDrop = useTaskStore( state => state.onDropTask );
   
   const handleOnDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     console.log("onDragOver", value);
+    setonDragOver(true);
   }
 
   const handleOnDragLeave = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDragLeave", value)
+    console.log("onDragLeave", value);
+    setonDragOver(false);
   }
 
   const handleOnDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDrop", value)
+    console.log("onDrop", value);
+    setonDragOver(false);
+    onTaskDrop(value);
   }
 
   return (
     <div 
       className={
         classNames("!text-black border-4 relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]", {
-          "border-blue-500 border-dotted" : isDragging
+          "border-blue-500 border-dotted" : isDragging,
+          "border-green-500 border-dotted" : isDragging && onDragOver
         })
       }
       onDragOver={handleOnDragOver}
       onDragLeave={handleOnDragLeave}
       onDrop={handleOnDrop}>
+      
       {/* Task Header */ }
       <div className="relative flex flex-row justify-between">
 
@@ -58,7 +65,6 @@ export const JiraTasks = ({ title, value, tasks }: Props) => {
         <button>
           <IoEllipsisHorizontalOutline />
         </button>
-
       </div>
 
       {/* Task Items */ }
