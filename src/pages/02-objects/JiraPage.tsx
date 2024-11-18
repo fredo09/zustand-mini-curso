@@ -14,9 +14,9 @@ export const JiraPage = () => {
       <hr />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <JiraTasks title='Abiertas' tasks={openTaskStore} value='open' />
-        <JiraTasks title='Avanzando' tasks={progressTaskStore} value='in-progress' />
-        <JiraTasks title='Terminadas' tasks={doneTaskStore} value='done' />
+        <JiraTasks title='Abiertas' tasks={openTaskStore} valueStatus='open' />
+        <JiraTasks title='Avanzando' tasks={progressTaskStore} valueStatus='in-progress' />
+        <JiraTasks title='Terminadas' tasks={doneTaskStore} valueStatus='done' />
       </div>
     </>
   );

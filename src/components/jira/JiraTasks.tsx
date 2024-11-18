@@ -5,41 +5,56 @@ import { SingleJira } from './SingleJira';
 import { useTaskStore } from '../../store/taks/task.store';
 
 import classNames from 'classnames';
+import Swal from 'sweetalert2';
 
 interface Props {
   title: string;
   tasks: TaskI[];
-  value: TaskStatus;
+  valueStatus: TaskStatus;
 }
 
-export const JiraTasks = ({ title, value, tasks }: Props) => {
+export const JiraTasks = ({ title, valueStatus, tasks }: Props) => {
   const [onDragOver, setonDragOver] = useState(false);
 
   const isDragging = useTaskStore( state => !!state.draggingTaskId );
   const onTaskDrop = useTaskStore( state => state.onDropTask );
   const addNewTask = useTaskStore( state => state.addTask )
 
-  const handleAddTask = () => {
-    addNewTask('Nueva tarea', value);
+  const handleAddTask = async () => {
+    const { isConfirmed, value: valueTask } = await Swal.fire({
+      title: 'Agrega una nueva tarea',
+      input: 'text',
+      inputLabel: 'Nombre de la tarea',
+      inputPlaceholder: 'Agrega la tarea',
+      showCancelButton: true,
+      inputValidator: (valueInput) => {
+        if (!valueInput) {
+          return 'Debes de poner el nombre de la tarea'
+        }
+      }
+    });
+
+    if(!isConfirmed) return;
+    addNewTask(valueTask, valueStatus);
   }
   
   const handleOnDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDragOver", value);
+    console.log("onDragOver", valueStatus);
     setonDragOver(true);
   }
 
   const handleOnDragLeave = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDragLeave", value);
+    console.log("onDragLeave", valueStatus);
     setonDragOver(false);
   }
 
   const handleOnDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDrop", value);
+    console.log("onDrop", valueStatus);
     setonDragOver(false);
-    onTaskDrop(value);
+    onTaskDrop(valueStatus);
   }
 
   return (
