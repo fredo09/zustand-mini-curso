@@ -5,7 +5,8 @@
 import { create, StateCreator } from 'zustand';
 import { TaskI, TaskStatus } from "../../interfaces";
 import { devtools } from 'zustand/middleware';
-import { v4 as uuidV4 } from 'uuid'
+import { v4 as uuidV4 } from 'uuid';
+import { produce } from 'immer';
 
 interface TaskState {
 
@@ -45,12 +46,19 @@ const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
     addTask: (title: string, status: TaskStatus) => {
         const newTask = { id: uuidV4(), title, status };
 
-        set((state)=> ({
-            tasks: {
-                ...state.tasks,
-                [newTask.id]: newTask
-            }
-        }))
+        // * Forma usando produce immer
+        set(produce((state: TaskState) => {
+            // mutacion del estado
+            state.tasks[newTask.id] = newTask;
+        }));
+
+        // * Forma base de mutar el nuevo estado 
+        // set((state)=> ({
+        //     tasks: {
+        //         ...state.tasks,
+        //         [newTask.id]: newTask
+        //     }
+        // }))
     },
 
     //Dragg and drop
