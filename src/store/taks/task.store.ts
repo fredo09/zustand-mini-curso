@@ -67,7 +67,6 @@ const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
         set({ draggingTaskId: taskId });
     },
     removeDragginTaskId: () => {
-        console.log("🚀 ~ remove task");
         set({ draggingTaskId: undefined });
     },
     changeTaskStatus: (taskId: string, status: TaskStatus) => {
