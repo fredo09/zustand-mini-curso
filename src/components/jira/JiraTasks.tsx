@@ -18,7 +18,7 @@ export const JiraTasks = ({ title, valueStatus, tasks }: Props) => {
 
   const isDragging = useTaskStore( state => !!state.draggingTaskId );
   const onTaskDrop = useTaskStore( state => state.onDropTask );
-  const addNewTask = useTaskStore( state => state.addTask )
+  const addNewTask = useTaskStore( state => state.addTask );
 
   const handleAddTask = async () => {
     const { isConfirmed, value: valueTask } = await Swal.fire({
@@ -40,19 +40,16 @@ export const JiraTasks = ({ title, valueStatus, tasks }: Props) => {
   
   const handleOnDragOver = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDragOver", valueStatus);
     setonDragOver(true);
   }
 
   const handleOnDragLeave = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDragLeave", valueStatus);
     setonDragOver(false);
   }
 
   const handleOnDrop = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-    console.log("onDrop", valueStatus);
     setonDragOver(false);
     onTaskDrop(valueStatus);
   }
