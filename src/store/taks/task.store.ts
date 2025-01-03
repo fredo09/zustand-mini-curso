@@ -4,9 +4,10 @@
 
 import { create, StateCreator } from 'zustand';
 import { TaskI, TaskStatus } from "../../interfaces";
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import { v4 as uuidV4 } from 'uuid';
-import { produce } from 'immer';
+import { immer } from 'zustand/middleware/immer';
+//import { produce } from 'immer';
 
 interface TaskState {
 
@@ -25,9 +26,11 @@ interface TaskState {
     changeTaskStatus:(taskId: string, status: TaskStatus) => void,
 
     onDropTask: (status: TaskStatus) => void,
+
+    totalTaks: () => number,
 }
 
-const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
+const TaskStoreApi: StateCreator<TaskState, [["zustand/immer", never]]> = (set, get) => ({
     //* Store
     draggingTaskId: undefined,
     tasks: {
@@ -46,13 +49,18 @@ const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
     addTask: (title: string, status: TaskStatus) => {
         const newTask = { id: uuidV4(), title, status };
 
-        // * Forma usando produce immer
-        set(produce((state: TaskState) => {
-            // mutacion del estado
-            state.tasks[newTask.id] = newTask;
-        }));
+        // * Forma middleware immer zustand
+        set( state => {
+            state.tasks[newTask.id] = newTask
+        });
 
-        // * Forma base de mutar el nuevo estado 
+        // * Forma usando produce immer
+        // set(produce((state: TaskState) => {
+        //     // mutacion del estado
+        //     state.tasks[newTask.id] = newTask;
+        // }));
+
+        // * Forma base de mutar el nuevo estado en zustand
         // set((state)=> ({
         //     tasks: {
         //         ...state.tasks,
@@ -70,15 +78,28 @@ const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
         set({ draggingTaskId: undefined });
     },
     changeTaskStatus: (taskId: string, status: TaskStatus) => {
-        const task = get().tasks[taskId];
+        const task = {
+            ...get().tasks[taskId]
+        };
         task.status = status;
 
-        set((state) => ({
-            tasks: {
-                ...state.tasks,
-                [taskId]: task
-            }
-        }))
+        // * Forma middleware immer
+        set( state => {
+            state.tasks[taskId] = {
+                // ! Se ocupa asi puesto que es un objeto anidado y se necesita mutar
+                ...task,
+                // ...state.tasks[taskId],
+                // status
+            };
+        });
+
+        // * Forma normal
+        // set((state) => ({
+        //     tasks: {
+        //         ...state.tasks,
+        //         [taskId]: task
+        //     }
+        // }))
     },
     onDropTask: (status: TaskStatus) => {
         const taskId = get().draggingTaskId;
@@ -86,11 +107,16 @@ const TaskStoreApi: StateCreator<TaskState> = (set, get) => ({
 
         get().changeTaskStatus(taskId, status);
         get().removeDragginTaskId();
+    },
+    totalTaks: () => {
+        return Object.keys(get().tasks).length;
     }
 });
 
 export const useTaskStore = create<TaskState>()(
     devtools(
-        TaskStoreApi
+        persist(
+            immer(TaskStoreApi)
+        , { name: 'taks-store' })
     )
 );
