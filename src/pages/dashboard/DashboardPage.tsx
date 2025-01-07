@@ -1,6 +1,11 @@
 import { WhiteCard } from '../../components';
 import { useBearStore, usePersonStore, useTaskStore } from '../../store';
-import { IoAccessibilityOutline, IoHeartOutline, IoListOutline, IoLockClosedOutline, IoPawOutline } from 'react-icons/io5';
+import { IoAccessibilityOutline, 
+  IoHeartOutline, 
+  IoListOutline, 
+  IoLockClosedOutline, 
+  IoPawOutline 
+} from 'react-icons/io5';
 
 export const Dashboard = () => {
 
