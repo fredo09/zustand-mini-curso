@@ -1,3 +1,4 @@
+// Guest Slice
 import { StateCreator } from "zustand";
 
 export interface GuestSlice {
